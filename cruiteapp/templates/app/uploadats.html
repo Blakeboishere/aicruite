@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>ATS Upload - AIcruiter</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=8">
+
+</head>
+
+<body>
+
+<!-- Profile Dropdown -->
+
+<div class="profile-wrapper">
+
+<div class="profile-dropdown">
+
+<button class="profile-btn" onclick="toggleProfileMenu()">
+<img src="{% static 'images/hamburger.png' %}" 
+alt="Profile"
+class="profile-icon">
+</button>
+
+<div id="profileMenu" class="profile-menu">
+
+<a href="{% url 'profile' %}">My Profile</a>
+<a href="{% url 'settings' %}">Settings</a>
+
+{% if request.user.employer %}
+<a href="{% url 'employer_dashboard' %}">Dashboard</a>
+{% endif %}
+
+{% if request.user.seekerprofile %}
+<a href="{% url 'upload_resume' %}">Resume Upload</a>
+{% endif %}
+
+<hr>
+
+<a href="{% url 'logout' %}">Logout</a>
+
+</div>
+</div>
+</div>
+
+
+<!-- MAIN PAGE -->
+
+<div class="target-page">
+
+<h1 class="target-title">Employee Targeted Role</h1>
+
+<div class="target-container">
+
+{% if error %}
+<p class="error-text">{{ error }}</p>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
+
+{% csrf_token %}
+
+<input
+class="target-role-input"
+type="text"
+name="role"
+placeholder="Enter Target Role"
+required
+>
+
+<div class="jd-section">
+
+<!-- Upload Area -->
+
+<div
+class="upload-area"
+id="dropArea"
+>
+
+<p id="uploadText">
+Click or drag resumes here
+</p>
+
+<span>Multiple PDFs allowed</span>
+
+</div>
+
+<input
+type="file"
+name="resumes"
+id="resumeInput"
+multiple
+accept=".pdf"
+hidden
+required
+>
+
+
+<div class="or-text">&</div>
+
+
+<!-- Job Description -->
+
+<div class="desc-box">
+
+<textarea
+name="description"
+placeholder="Paste job description here"
+required
+></textarea>
+
+</div>
+
+</div>
+
+
+<div class="start-btn-wrapper">
+
+<button
+type="submit"
+class="find-btn"
+>
+
+Confirm Selection
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+
+<script>
+
+function toggleProfileMenu(){
+document.getElementById("profileMenu").classList.toggle("show-menu")
+}
+
+const dropArea = document.getElementById("dropArea")
+const fileInput = document.getElementById("resumeInput")
+const uploadText = document.getElementById("uploadText")
+
+dropArea.addEventListener("click",()=>fileInput.click())
+
+dropArea.addEventListener("dragover",(e)=>{
+e.preventDefault()
+dropArea.style.backgroundColor="#e3f2fd"
+})
+
+dropArea.addEventListener("dragleave",()=>{
+dropArea.style.backgroundColor="#ffffff"
+})
+
+dropArea.addEventListener("drop",(e)=>{
+e.preventDefault()
+
+const files = e.dataTransfer.files
+fileInput.files = files
+
+uploadText.innerText = files.length + " file(s) selected"
+})
+
+fileInput.addEventListener("change",function(){
+uploadText.innerText = this.files.length + " file(s) selected"
+})
+
+
+function showLoading(){
+
+const form=document.querySelector("form")
+form.style.display="none"
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AICRUITER</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="landing">
+
+<img src="{% static 'images/logo.png' %}" alt="AIcruiter Logo" class="landing-logo">
+
+<h1>AICruiter</h1>
+
+<a href="{% url 'login' %}" class="get-started-btn">
+Get Started
+</a>
+
+</div>
+
+</body>
+</html>

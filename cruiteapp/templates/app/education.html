@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Educational Background - AIcruiter</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
+
+</head>
+
+<body>
+
+<div class="education-container">
+
+<form method="POST">
+
+{% csrf_token %}
+
+<h1>Educational Background</h1>
+
+<div class="edu-row">
+
+<div>
+<label>Qualification</label>
+<input type="text" name="qualification" placeholder="Enter qualification" required>
+</div>
+
+<div>
+<label>Field</label>
+<input type="text" name="field" placeholder="Enter field of study" required>
+</div>
+
+</div>
+
+
+<div class="edu-row">
+
+<div>
+<label>College / University Name</label>
+<input type="text" name="college" placeholder="Enter college/university" required>
+</div>
+
+<div>
+<label>CGPA</label>
+<input type="text" name="cgpa" placeholder="Enter CGPA">
+</div>
+
+</div>
+
+
+<div class="edu-row">
+
+<div>
+<label>Passing Year</label>
+<input type="number" name="passing_year" placeholder="Enter passing year" required>
+</div>
+
+</div>
+
+<button type="submit" class="save-btn">
+Save
+</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

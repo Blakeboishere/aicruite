@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settings - AIcruiter</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<div class="page-wrapper">
+
+<div class="containera settings fade-in">
+
+<h1>Account Settings</h1>
+
+<form method="POST">
+{% csrf_token %}
+
+<h2>Account Information</h2>
+
+<div class="settings-row">
+<label>Full Name</label>
+<input type="text" name="full_name" value="{{ user.first_name }}">
+</div>
+
+<div class="settings-row">
+<label>Email</label>
+<input type="email" name="email" value="{{ user.email }}">
+</div>
+
+<div class="settings-row">
+<label>New Password</label>
+<input type="password" name="password">
+</div>
+
+<hr>
+
+<h2>Preferences</h2>
+
+<div class="settings-row">
+<label>Default ATS Role</label>
+<input type="text" name="default_role" value="{{ profile.default_role }}">
+</div>
+
+<div class="settings-row checkbox-row">
+<label>
+<input type="checkbox" name="email_notifications"
+{% if profile.email_notifications %}checked{% endif %}
+>
+Enable Email Notifications
+</label>
+</div>
+
+<hr>
+
+<div class="center-btn">
+<button type="submit" class="get-started-btn">
+Save Settings
+</button>
+<form method="POST" action="{% url 'settings' %}" style="margin-top:30px; text-align:center;">
+    <button type="submit" class="get-started-btn">
+        Settings
+    </button>
+</form>
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Information - AIcruiter</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
+
+</head>
+<body>
+<div class="page-wrapper" style="align-items: flex-start; padding-top:40px;">
+<div class="containera personal fade-in">
+    <form method="POST">
+        {% csrf_token %}
+
+        <h1>Personal Information</h1>
+
+        <label>Full Name</label>
+        <input type="text" name="full_name" placeholder="Enter full name" required>
+
+        <label>Age</label>
+        <input type="number" name="age" placeholder="Enter age" required>
+
+        <label>Gender</label>
+        <select name="gender" required>
+            <option value="">Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+        </select>
+
+        <label>Email ID</label>
+        <input type="email" name="email" placeholder="Enter email" required>
+
+        <label>Phone Number</label>
+        <input type="text" name="phone" placeholder="Enter phone number" required>
+
+        <label>Country</label>
+        <select name="country" id="countrySelect" onchange="toggleAddress()" required>
+            <option value="">Select Country</option>
+            <option value="India">India</option>
+            <option>United States</option>
+            <option>United Kingdom</option>
+            <option>Canada</option>
+            <option>Australia</option>
+            <option>Germany</option>
+            <option>France</option>
+            <option>Singapore</option>
+            <option>Japan</option>
+            <option>South Korea</option>
+            <option>United Arab Emirates</option>
+            <option>Other</option>
+        </select>
+
+        <!-- INDIA ADDRESS SECTION -->
+        <div id="indiaAddress" style="display: none;">
+
+            <h3>Address Details</h3>
+
+            <label>State</label>
+            <input type="text" name="state" placeholder="Enter state">
+
+            <label>District</label>
+            <input type="text" name="district" placeholder="Enter district">
+
+            <label>Area / Locality</label>
+            <input type="text" name="area" placeholder="Enter area">
+
+            <label>Society / House Name</label>
+            <input type="text" name="house_name" placeholder="Enter society or house name">
+
+            <label>Room / Flat Number</label>
+            <input type="text" name="flat_number" placeholder="Enter room or flat number">
+
+            <label>Postal Code</label>
+            <input type="text" name="postal_code" placeholder="Enter postal code">
+
+        </div>
+
+        <button type="submit" class="save-btn">Save</button>
+    </form>
+</div>
+</div>
+<script>
+    function toggleAddress() {
+        const country = document.getElementById("countrySelect").value;
+        const indiaAddress = document.getElementById("indiaAddress");
+
+        if (country === "India") {
+            indiaAddress.style.display = "block";
+        } else {
+            indiaAddress.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

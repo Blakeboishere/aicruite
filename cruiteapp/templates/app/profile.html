@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>My Profile - AIcruiter</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=8">
+
+<script>
+function enableEdit(){
+
+const inputs=document.querySelectorAll(".editable")
+
+inputs.forEach(input=>{
+input.removeAttribute("readonly")
+})
+
+document.getElementById("editBtn").style.display="none"
+document.getElementById("saveBtn").style.display="inline-block"
+
+}
+</script>
+
+</head>
+
+<body>
+
+
+<div class="account-wrapper">
+
+<div class="account-card">
+
+<form method="POST">
+
+{% csrf_token %}
+
+<!-- PROFILE HEADER -->
+
+<div class="profile-header">
+
+<img src="{% static 'images/profile_pfp.png' %}" class="profile-pic">
+
+<div class="profile-basic">
+
+<h2>{{ user.email }}</h2>
+
+<p>
+
+{% if employer %}
+Employer
+{% else %}
+Job Seeker
+{% endif %}
+
+</p>
+
+</div>
+
+</div>
+
+
+<!-- BASIC INFO -->
+
+<div class="section">
+
+<h3>Account Information</h3>
+
+<div class="grid">
+
+<div>
+<label>Email</label>
+<input type="text" value="{{ user.email }}" readonly>
+</div>
+
+</div>
+
+</div>
+
+
+{% if seeker %}
+
+<div class="section">
+
+<h3>Job Seeker Information</h3>
+
+<div class="grid">
+
+<div>
+<label>Full Name</label>
+<input class="editable" name="full_name" type="text" value="{{ seeker.full_name }}" readonly>
+</div>
+
+<div>
+<label>Phone</label>
+<input class="editable" name="phone" type="text" value="{{ seeker.phone }}" readonly>
+</div>
+
+<div>
+<label>Qualification</label>
+<input class="editable" name="qualification" type="text" value="{{ seeker.qualification }}" readonly>
+</div>
+
+<div>
+<label>CGPA</label>
+<input class="editable" name="cgpa" type="text" value="{{ seeker.cgpa }}" readonly>
+</div>
+
+</div>
+
+</div>
+
+{% endif %}
+
+
+{% if employer %}
+
+<div class="section">
+
+<h3>Employer Information</h3>
+
+<div class="grid">
+
+<div>
+<label>Full Name</label>
+<input class="editable" name="full_name" type="text" value="{{ employer.full_name }}" readonly>
+</div>
+
+<div>
+<label>Department</label>
+<input class="editable" name="department" type="text" value="{{ employer.department }}" readonly>
+</div>
+
+<div>
+<label>Designation</label>
+<input class="editable" name="designation" type="text" value="{{ employer.designation }}" readonly>
+</div>
+
+<div>
+<label>Official Email</label>
+<input class="editable" name="official_email" type="text" value="{{ employer.official_email }}" readonly>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="section">
+
+<h3>Company Information</h3>
+
+<div class="grid">
+
+<div>
+<label>Company Name</label>
+<input class="editable" name="company_name" type="text" value="{{ employer.company.company_name }}" readonly>
+</div>
+
+<div>
+<label>Industry</label>
+<input class="editable" name="industry" type="text" value="{{ employer.company.industry }}" readonly>
+</div>
+
+<div>
+<label>Company Size</label>
+<input class="editable" name="company_size" type="text" value="{{ employer.company.company_size }}" readonly>
+</div>
+<div>
+<label>Branch Location</label>
+<input class="editable" name="company_website" type="text" value="{{ employer.branch_location }}" readonly>
+</div>
+</div>
+
+</div>
+
+{% endif %}
+
+
+<!-- ACTION BUTTONS -->
+
+<div class="action-bar">
+
+<button type="button" id="editBtn" class="btn secondary" onclick="enableEdit()">
+Edit Profile
+</button>
+
+<button type="submit" id="saveBtn" class="btn primary" style="display:none;">
+Save Changes
+</button>
+
+</div>
+
+
+</form>
+
+
+<!-- NAVIGATION -->
+
+<div class="action-bar" style="margin-top:25px;">
+
+
+<form method="POST" action="{% url 'logout' %}">
+{% csrf_token %}
+<button type="submit" class="btn primary">
+Logout
+</button>
+</form>
+
+</div>
+
+
+</div>
+
+</div>
+
+</body>
+</html>

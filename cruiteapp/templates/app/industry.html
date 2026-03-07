@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Company Information</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="company-container">
+
+<h1>Company Information</h1>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<label>Company Name</label>
+{{ form.company_name }}
+
+<label>Industry Type</label>
+{{ form.industry }}
+
+<label>Company Size</label>
+{{ form.company_size }}
+
+<label>Head Office Location</label>
+{{ form.head_office }}
+
+<label>About the Company</label>
+{{ form.about_company }}
+
+<label>Company Website</label>
+{{ form.company_website }}
+
+<button type="submit" class="save-btn">
+Save & Continue
+</button>
+
+</form>
+
+</div>
+
+</body>
+</html>
