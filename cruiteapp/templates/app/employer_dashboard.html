@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Employer Dashboard - AIcruiter</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=9">
+
+</head>
+
+<body>
+
+<!-- PROFILE MENU -->
+
+<div class="profile-wrapper">
+
+<div class="profile-dropdown">
+
+<button class="profile-btn" onclick="toggleProfileMenu()">
+
+<img src="{% static 'images/hamburger.png' %}" class="profile-icon">
+
+</button>
+
+<div id="profileMenu" class="profile-menu">
+
+<a href="{% url 'profile' %}">My Profile</a>
+<a href="{% url 'settings' %}">Settings</a>
+
+{% if request.user.employer %}
+<a href="{% url 'employer_dashboard' %}">Dashboard</a>
+{% endif %}
+
+{% if request.user.seekerprofile %}
+<a href="{% url 'upload_resume' %}">Resume Upload</a>
+{% endif %}
+
+<hr>
+
+<a href="{% url 'logout' %}">Logout</a>
+
+</div>
+</div>
+</div>
+
+
+<script>
+function toggleProfileMenu(){
+document.getElementById("profileMenu").classList.toggle("show-menu")
+}
+</script>
+
+
+<!-- MAIN DASHBOARD -->
+
+<div class="dashboard-page">
+
+<h1 class="welcome-title">
+
+Welcome
+
+{% if employer.full_name %}
+{{ employer.designation }}, {{ employer.full_name }}
+{% else %}
+{{ request.user.email }}
+{% endif %}
+
+</h1>
+
+
+{% if not employer.hr_completed or not employer.company or not employer.company.company_completed %}
+
+<div class="stat-card" style="margin:auto; text-align:center; max-width:400px;">
+
+<p>Your company profile is not complete.</p>
+
+<a href="{% url 'employer' %}" class="start-btn">
+Complete Profile
+</a>
+
+</div>
+
+{% else %}
+
+
+<!-- STATS -->
+
+<div class="stats-container">
+
+<div class="stat-card">
+
+<div class="stat-number">
+{{ total_searches|default:0 }}
+</div>
+
+<div class="stat-label">
+Total ATS Searches
+</div>
+
+</div>
+
+
+<div class="stat-card">
+
+<div class="stat-number">
+{{ shortlisted|default:0 }}
+</div>
+
+<div class="stat-label">
+Candidates Shortlisted
+</div>
+
+</div>
+
+
+<div class="stat-card">
+
+<div class="stat-number">
+{{ interviews|default:0 }}
+</div>
+
+<div class="stat-label">
+Interviews Scheduled
+</div>
+
+</div>
+
+</div>
+
+
+<div class="dashboard-btn-wrapper">
+
+<a href="{% url 'upload_ats' %}" class="start-btn">
+
+Go to ATS Screening
+
+</a>
+
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Employer Information - AIcruiter</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="employer-container">
+
+<h1>Employer Information</h1>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<label for="id_full_name">Name</label>
+{{ form.full_name }}
+
+<label for="id_department">Department</label>
+{{ form.department }}
+
+<label for="id_designation">Designation</label>
+{{ form.designation }}
+
+<label for="id_official_email">Official Email ID</label>
+{{ form.official_email }}
+
+<label for="id_company_name">Company Name</label>
+{{ form.company_name }}
+
+<label for="id_branch_location">Branch Location</label>
+{{ form.branch_location }}
+
+<label for="id_experience_years">Years of Hiring Experience</label>
+{{ form.experience_years }}
+
+<button type="submit" class="save-btn">
+Save & Continue
+</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

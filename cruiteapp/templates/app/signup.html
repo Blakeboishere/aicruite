@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Sign Up - AIcruiter</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=2">
+
+</head>
+
+<body>
+
+<div class="signup-container">
+
+<h1>Sign Up</h1>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<label>Email</label>
+<input type="email" name="email" placeholder="Enter Email" required>
+
+<label>New Password</label>
+<input type="password" name="password" placeholder="Enter Password" required>
+
+<label>Confirm Password</label>
+<input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+{% if form.errors %}
+<p class="error-text">
+{{ form.errors }}
+</p>
+{% endif %}
+
+<button type="submit" class="signup-btn">
+Sign Up
+</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

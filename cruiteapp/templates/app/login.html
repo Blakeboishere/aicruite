@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Login - AIcruiter</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=3">
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+<h1>Login</h1>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<label>Email</label>
+<input type="email" name="email" placeholder="Enter Email" required>
+
+<label>Password</label>
+<input type="password" name="password" placeholder="Enter Password" required>
+
+<a href="{% url 'password_reset' %}" class="forgot">
+Forgot Password?
+</a>
+
+{% if form.errors %}
+<p class="error-text">
+Invalid email or password
+</p>
+{% endif %}
+
+<button type="submit" class="login-btn">
+Log In
+</button>
+
+</form>
+
+<p class="signup-text">
+Don't have an account?
+<a href="{% url 'signup' %}">Sign up</a>
+</p>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Resume Feedback - AIcruiter</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=10">
+
+</head>
+
+<body>
+
+<!-- PROFILE MENU -->
+<div class="profile-wrapper">
+
+<div class="profile-dropdown">
+
+<button class="profile-btn" onclick="toggleProfileMenu()">
+<img src="{% static 'images/hamburger.png' %}" class="profile-icon">
+</button>
+
+<div id="profileMenu" class="profile-menu">
+
+<a href="{% url 'profile' %}">My Profile</a>
+<a href="{% url 'settings' %}">Settings</a>
+
+{% if request.user.employer %}
+<a href="{% url 'employer_dashboard' %}">Dashboard</a>
+{% endif %}
+
+{% if request.user.seekerprofile %}
+<a href="{% url 'upload' %}">Resume Upload</a>
+{% endif %}
+
+<hr>
+
+<a href="{% url 'logout' %}">Logout</a>
+
+</div>
+</div>
+</div>
+
+<script>
+function toggleProfileMenu(){
+document.getElementById("profileMenu").classList.toggle("show-menu")
+}
+</script>
+
+
+<!-- MAIN PAGE -->
+<div class="page-wrapper">
+
+<div class="containera ats fade-in">
+
+<h1>Resume Feedback</h1>
+
+{% if role %}
+<div class="summary-box">
+<p><strong>Target Role:</strong> {{ role }}</p>
+</div>
+{% endif %}
+
+
+<!-- OVERALL SCORE -->
+<div class="summary-box">
+
+<h3>Overall Score</h3>
+
+<div class="metric-label">
+<span>Resume Quality Score</span>
+<span>{{ result.resume_quality_score }}%</span>
+</div>
+
+<div class="score-bar large">
+<div class="score-fill" data-score="{{ result.resume_quality_score }}"></div>
+</div>
+
+</div>
+
+
+<!-- ANALYSIS SECTION -->
+<div class="analysis-columns">
+
+<!-- STRENGTHS -->
+<div>
+
+<h4>Strengths</h4>
+
+<ul>
+{% for s in result.strengths %}
+<li>{{ s }}</li>
+{% endfor %}
+</ul>
+
+</div>
+
+
+<!-- WEAKNESSES -->
+<div>
+
+<h4>Weaknesses</h4>
+
+<ul>
+{% for w in result.key_weaknesses %}
+<li>{{ w }}</li>
+{% endfor %}
+</ul>
+
+</div>
+
+
+<!-- RED FLAGS -->
+<div>
+
+<h4>Skill Gap</h4>
+
+<ul>
+{% for rf in result.skill_gap %}
+<li>{{ rf }}</li>
+{% endfor %}
+</ul>
+
+</div>
+
+</div>
+
+
+<!-- BUTTON -->
+<div class="center-btn" style="margin-top:40px;">
+
+<a href="{% url 'upload' %}" class="get-started-btn">
+Analyze Another Resume
+</a>
+
+</div>
+
+</div>
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+setTimeout(function(){
+
+document.querySelectorAll(".score-fill").forEach(function(bar){
+
+const score = bar.dataset.score
+
+if(score){
+bar.style.width = score + "%"
+}
+
+})
+
+},100)
+
+})
+
+</script>
+
+
+</body>
+</html>

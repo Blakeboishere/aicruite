@@ -1,0 +1,273 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>ATS Results</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=9">
+
+</head>
+
+<body>
+
+<!-- PROFILE MENU -->
+
+<div class="profile-wrapper">
+
+<div class="profile-dropdown">
+
+<button class="profile-btn" onclick="toggleProfileMenu()">
+<img src="{% static 'images/hamburger.png' %}" 
+alt="Profile"
+class="profile-icon">
+</button>
+
+<div id="profileMenu" class="profile-menu">
+
+<a href="{% url 'profile' %}">My Profile</a>
+<a href="{% url 'settings' %}">Settings</a>
+
+{% if request.user.employer %}
+<a href="{% url 'employer_dashboard' %}">Dashboard</a>
+{% endif %}
+
+{% if request.user.seekerprofile %}
+<a href="{% url 'upload_resume' %}">Resume Upload</a>
+{% endif %}
+
+<hr>
+
+<a href="{% url 'logout' %}">Logout</a>
+
+</div>
+</div>
+</div>
+
+
+<div class="dashboard-page">
+
+<div class="account-wrapper">
+
+<div class="account-card">
+
+<h1>ATS Screening Results</h1>
+
+<div class="summary-box">
+
+<p><strong>Target Role:</strong> {{ role }}</p>
+
+<p><strong>Job Description:</strong></p>
+
+<p>{{ description }}</p>
+
+</div>
+
+
+<!-- RESULTS GRID -->
+
+<div class="ats-grid">
+
+{% for r in results %}
+
+<div class="ats-tile">
+
+<div>
+
+<h4 style="margin-bottom:10px;">
+{{ r.filename }}
+</h4>
+
+<button class="more-btn"
+onclick="openModal('{{ forloop.counter }}')">
+View Details
+</button>
+
+<div class="overall-score" style="margin-bottom:15px;">
+{{ r.overall_score }}%
+</div>
+
+<div class="score-bar large">
+
+<div class="score-fill"
+data-score="{{ r.overall_score }}">
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+<!-- MODALS -->
+
+{% for r in results %}
+
+<div id="modal-{{ forloop.counter }}" class="modal-overlay">
+
+<div class="modal-card">
+
+<span class="close-btn"
+onclick="closeModal('{{ forloop.counter }}')">
+&times;
+</span>
+
+<h3>{{ r.filename }} — Detailed Analysis</h3>
+
+
+<div class="metric">
+
+<div class="metric-label">
+<span>Overall Score</span>
+<span>{{ r.overall_score }}%</span>
+</div>
+
+<div class="score-fill"
+data-score="{{ r.overall_score }}">
+</div>
+
+</div>
+
+
+<div class="metric">
+
+<div class="metric-label">
+<span>Role Match</span>
+<span>{{ r.role_match_score }}%</span>
+</div>
+
+<div class="score-bar">
+
+<div class="score-fill"
+data-score="{{ r.role_match_score }}">
+</div>
+
+</div>
+
+</div>
+
+
+<div class="metric">
+
+<div class="metric-label">
+<span>Skill Match</span>
+<span>{{ r.skill_match_score }}%</span>
+</div>
+
+<div class="score-bar">
+
+<div class="score-fill"
+data-score="{{ r.skill_match_score }}">
+</div>
+
+</div>
+
+</div>
+
+
+<div class="metric">
+
+<div class="metric-label">
+<span>Resume Strength</span>
+<span>{{ r.resume_strength_score }}%</span>
+</div>
+
+<div class="score-bar">
+
+<div class="score-fill"
+data-score="{{ r.resume_strength_score }}">
+</div>
+
+</div>
+
+</div>
+
+
+<div class="analysis-columns">
+
+<div>
+<h6>Strengths</h6>
+<ul>
+{% for s in r.strengths %}
+<li>{{ s }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div>
+<h6>Weaknesses</h6>
+<ul>
+{% for w in r.weaknesses %}
+<li>{{ w }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div>
+<h6>Red Flags</h6>
+<ul>
+{% for rf in r.red_flags %}
+<li>{{ rf }}</li>
+{% endfor %}
+</ul>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+
+<div style="margin-top:40px; text-align:center;">
+
+<a href="{% url 'upload_ats' %}" class="get-started-btn">
+Screen More Resumes
+</a>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+<script>
+
+function toggleProfileMenu(){
+document.getElementById("profileMenu").classList.toggle("show-menu")
+}
+
+function openModal(id){
+document.getElementById("modal-"+id).style.display="flex"
+}
+
+function closeModal(id){
+document.getElementById("modal-"+id).style.display="none"
+}
+
+window.onclick=function(event){
+document.querySelectorAll(".modal-overlay").forEach(function(modal){
+if(event.target===modal){
+modal.style.display="none"
+}
+})
+}
+
+document.addEventListener("DOMContentLoaded",function(){
+document.querySelectorAll(".score-fill").forEach(function(bar){
+const score=bar.getAttribute("data-score")
+bar.style.width=score+"%"
+})
+})
+
+</script>
+
+</body>
+</html>

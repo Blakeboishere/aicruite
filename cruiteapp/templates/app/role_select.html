@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Choose Your Role</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=1">
+
+</head>
+
+<body>
+
+<div class="role-container">
+
+<h1>Welcome to AIcruiter</h1>
+
+<div class="role-boxes">
+
+<!-- Employer -->
+<form method="POST" action="{% url 'role_select' %}">
+{% csrf_token %}
+
+<input type="hidden" name="role" value="employer">
+
+<button type="submit" class="role-box">
+
+<h2>Employer</h2>
+
+<p>
+Upload resumes and screen candidates using AI-powered ATS analysis.
+</p>
+
+</button>
+
+</form>
+
+
+<!-- Job Seeker -->
+<form method="POST" action="{% url 'role_select' %}">
+{% csrf_token %}
+
+<input type="hidden" name="role" value="seeker">
+
+<button type="submit" class="role-box">
+
+<h2>Job Seeker</h2>
+
+<p>
+Upload your resume and receive detailed improvement feedback.
+</p>
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+</html>

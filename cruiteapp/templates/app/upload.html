@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Resume Analysis - AIcruiter</title>
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=5">
+
+</head>
+
+<body>
+
+<!-- Profile Menu -->
+<div class="profile-wrapper">
+
+<div class="profile-dropdown">
+
+<button class="profile-btn" onclick="toggleProfileMenu()">
+
+<img src="{% static 'images/hamburger.png' %}" 
+alt="Profile"
+class="profile-icon">
+
+</button>
+
+<div id="profileMenu" class="profile-menu">
+
+<a href="{% url 'profile' %}">My Profile</a>
+<a href="{% url 'settings' %}">Settings</a>
+
+{% if request.user.employer %}
+<a href="{% url 'employer_dashboard' %}">Dashboard</a>
+{% endif %}
+
+{% if request.user.seekerprofile %}
+<a href="{% url 'upload' %}">Resume Upload</a>
+{% endif %}
+
+<hr>
+
+<a href="{% url 'logout' %}">Logout</a>
+
+</div>
+</div>
+</div>
+
+
+{% if not seekerprofile.is_completed %}
+
+<div class="upload-container">
+
+<p>Your profile is not complete.</p>
+
+<a href="{% url 'personal' %}" class="get-started-btn">
+Complete Profile
+</a>
+
+</div>
+
+{% else %}
+
+<div class="upload-container">
+
+<h1 class=>Resume Analysis</h1>
+
+{% if not result %}
+
+<form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
+
+{% csrf_token %}
+
+<label class"uploadwala">{{ form.role.label }}</label>
+{{ form.role }}
+
+<label class="uploadwala">{{ form.resume.label }}</label>
+
+<div class="upload-box" onclick="document.getElementById('id_resume').click()">
+
+<p>Click to upload your resume</p>
+<small>Only one PDF allowed</small>
+
+</div>
+
+{{ form.resume }}
+
+{% if form.errors %}
+<p class="error-text">
+{{ form.errors }}
+</p>
+{% endif %}
+
+<button type="submit" class="get-started-btn">
+Analyze Resume
+</button>
+
+</form>
+
+{% endif %}
+
+</div>
+
+{% endif %}
+<a href="https://ai-cruite-fm3s.vercel.app"><img src="{% static 'images/robot.png' %}" class="robotimg"></a>
+
+<script>
+
+function toggleProfileMenu() {
+document.getElementById("profileMenu").classList.toggle("show-menu")
+}
+
+</script>
+
+</body>
+</html>
