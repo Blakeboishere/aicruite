@@ -42,7 +42,7 @@ def signup(request):
             password = form.cleaned_data["password"]
 
             User.objects.create_user(
-                username=email,   # ← use email as username
+                username=email,  
                 email=email,
                 password=password
             )
@@ -86,7 +86,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return redirect("role_select")  # or dashboard
+            return redirect("role_select")  
 
         else:
             return render(request, "app/login.html", {
@@ -119,7 +119,6 @@ from .models import Employer, SeekerProfile
 @login_required
 def role_select(request):
 
-    # If user already has a role, skip this page
     if hasattr(request.user, "employer") or hasattr(request.user, "seekerprofile"):
         return redirect("role_redirect")
 
@@ -170,19 +169,16 @@ def role_redirect(request):
 
     if employer:
 
-        # Step 1: HR form incomplete
         if not employer.hr_completed:
             return redirect("employer")
 
-        # Step 2: Company onboarding incomplete
         company = employer.company
         if not company or not company.company_completed:
             return redirect("employer_onboarding")
 
-        # Step 3: Everything done
         return redirect("employer_dashboard")
 
-    # Seeker logic (keep this intact)
+    # Seeker logic 
     seeker = SeekerProfile.objects.filter(user=request.user).first()
     if seeker:
         if not seeker.is_completed:
@@ -198,7 +194,6 @@ def forgot(request):
         form = ForgotPasswordForm(request.POST)
 
         if form.is_valid():
-            # later: send email here
             message = "Password reset link has been sent to your email"
             form = ForgotPasswordForm()  # reset form
     else:
@@ -318,9 +313,9 @@ def employer_dashboard(request):
     return render(request, "app/employer_dashboard.html", {
         "employer": employer
     })
+
 @employer_required
 def ats(request):
-
 
     if request.path.endswith("upload_ats/"):
 
@@ -350,8 +345,7 @@ def ats(request):
 
         return render(request, "app/uploadats.html")
 
-
-    # Phase 2: Screen Page
+    # SCREEN PAGE
     elif request.path.endswith("screen_ats/"):
 
         role = request.session.get("role")
@@ -368,53 +362,53 @@ def ats(request):
 
             file_path = fs.path(name)
 
-        # ---- Parse Resume ----
+            # Parse resume
             parser_output = parse_resume(file_path)
 
-        # ---- Save Resume in DB ----
+            # Save resume
             resume = Resume.objects.create(
-               user=request.user,
+                user=request.user,
                 file=name,
                 raw_text=parser_output.get("raw_text", "")
             )
 
-        # ---- Run ATS Analysis ----
-        ats_result = run_ats_analysis(
-            resume=resume,
-            parser_output=parser_output,
-            role_title=role,
-            job_description=description
-        )
+            # Run ATS analysis
+            ats_result = run_ats_analysis(
+                resume=resume,
+                parser_output=parser_output,
+                role_title=role,
+                job_description=description
+            )
 
-        results.append({
-            "filename": name,
-            "overall_score": ats_result["overall_score"],
-            "role_match_score": ats_result["role_match_score"],
-            "skill_match_score": ats_result["skill_match_score"],
-            "resume_strength_score": ats_result["resume_strength_score"],
-            "strengths": ats_result["strengths"],
-            "weaknesses": ats_result["weaknesses"],
-            "red_flags": ats_result["red_flags"],
+            # Store result
+            results.append({
+                "filename": name,
+                "overall_score": ats_result["overall_score"],
+                "role_match_score": ats_result["role_match_score"],
+                "skill_match_score": ats_result["skill_match_score"],
+                "resume_strength_score": ats_result["resume_strength_score"],
+                "strengths": ats_result["strengths"],
+                "weaknesses": ats_result["weaknesses"],
+                "red_flags": ats_result["red_flags"],
+            })
+
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+        # Clear session
+        request.session.pop("resume_files", None)
+
+        return render(request, "app/screenats.html", {
+            "results": results,
+            "role": role,
+            "description": description
         })
-
-        if os.path.exists(file_path):
-            os.remove(file_path)
-
-    # Clear session so refresh doesn't reprocess
-    request.session.pop("resume_files", None)
-
-    return render(request, "app/screenats.html", {
-        "results": results,
-        "role": role,
-        "description": description
-    })
 
 @seeker_required
 def upload_resume(request):
 
     profile = SeekerProfile.objects.filter(user=request.user).first()
 
-    # Force profile completion first
     if not profile or not profile.is_completed:
         return redirect("personal")
 
@@ -456,11 +450,10 @@ def resume_result(request):
     result = request.session.get("analysis_result")
     role = request.session.get("role")
 
-    # If user directly opens the page
     if not result:
         return redirect("upload")
+    
 
-    # Clear session after reading (prevents refresh issues)
     request.session.pop("analysis_result", None)
     request.session.pop("role", None)
 

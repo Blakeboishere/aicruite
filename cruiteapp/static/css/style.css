@@ -380,6 +380,7 @@ body {
     display: flex;
     justify-content: center;
     padding: 40px 20px;
+    padding-top:200px;
 }
 
 .account-card {
